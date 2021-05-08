@@ -1,5 +1,12 @@
 #!/bin/bash
- 
+
+#verificar se o final.json existe 
+$(ls final.json) &> /dev/null
+
+if [[ $? == 2 ]]; then 
+    touch final.json
+fi
+
 #Escrever no arquivo caso ele esteja vazio#
 function comeco(){
     #1.colocar a chave no arquivo
@@ -27,7 +34,7 @@ function comeco(){
         echo -e "\t$var3," >> final.json
     fi
 
-    
+return $var3
 }
 
 function meio(){
@@ -61,10 +68,12 @@ if [[ $? == 0 ]]; then
     
         if [[ $final == 'final' ]]; then
             echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")" >> final.json
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")
             echo -e "\t}\n}" >> final.json
         else
             # mandar a hora e a porcentagem pro final.json
             echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")," >> final.json
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")
         fi
     else
         
@@ -74,11 +83,13 @@ if [[ $? == 0 ]]; then
         if [[ $final == 'final' ]]; then
             hora2=$(cat retorno.txt | grep Day: | cut -d" " -f2 | cut -d'"' -f1)
             echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")" >> final.json
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")
             echo -e "\t}\n}" >> final.json
         else
             # se a ultima linha não for a } colocar a hora e a porcentagem no final.json
             hora2=$(cat retorno.txt | grep Day: | cut -d" " -f2 | cut -d'"' -f1)
             echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")," >> final.json
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")
         fi
     fi 
 
@@ -109,22 +120,26 @@ elif [[ $? == 1 ]]; then
         
         if [[ $final == 'final' ]]; then
             # mandar a hora e a porcentagem pro final.json
-            echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")" >> final.json  
+            echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")" >> final.json   
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:") 
             echo -e "\t}\n}" >> final.json
         else
             # mandar a hora e a porcentagem pro final.json
             echo -e "\t$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")," >> final.json
+            saida=$(cat retorno.txt | sed "s/percentage/$hora2/" | grep "$hora2.:")
         fi
         
     fi
 fi
+return $saida
 }
 
-qntdlinhajson=$(wc -l final.json | cut -d" " -f1)
+qntdlinhajson=$(wc -l final.json | cut -d" " -f1) 
 
 #verificar se o arquivo está vazio 
 if [[ $qntdlinhajson == 0 ]]; then 
     comeco
+    ###manipular os returns 
     $(cat retorno.txt >> logretorno.txt)
     echo "" > retorno.txt
 else
@@ -132,6 +147,9 @@ else
     $(cat retorno.txt >> logretorno.txt)
     echo "" > retorno.txt
 fi
+
+
+################
 
 
 

@@ -4,7 +4,7 @@ var now = require('./data');
 const {execFile} = require('child_process');
 
 //Decedir quantas vezes por hora. Máximo 60X por hora(uma requisição por minuto), minimo 1X por hora (uma requisição por hora)
-var L = 20;
+var L = 2;
 
 function executar(){
     execFile('./final.sh', (error, stdout, stderr) => {
@@ -28,7 +28,7 @@ function executar(){
     var dia = ("Day:" + now + " " + data.getHours() + ':' + data.getMinutes())
     console.log(dia);
     
-    const browser = await puppeteer.launch({ /*headless: false,*/ timeout: 0 });
+    const browser = await puppeteer.launch({ headless: false, timeout: 0 });
     const page = await browser.newPage();
     await page.setDefaultNavigationTimeout(0);
     await page.goto('https://www.infomoney.com.br/cotacoes/dogecoin-doge/');
@@ -74,7 +74,7 @@ function executar(){
     //SETTIMEOUT()      MILISEGUNDOS//
     //                       |
     //                       V
-    var end = Date.now() + 60000;
+    var end = Date.now() + 30000;
     
     if(i == (L - 1)){
         fs.appendFile('retorno.txt', "final", err => {
