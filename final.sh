@@ -131,21 +131,23 @@ elif [[ $? == 1 ]]; then
         
     fi
 fi
-return $saida
+echo "$saida"
 }
 
 qntdlinhajson=$(wc -l final.json | cut -d" " -f1) 
 
 #verificar se o arquivo está vazio 
 if [[ $qntdlinhajson == 0 ]]; then 
-    comeco
-    ###manipular os returns 
+    retorno=$( comeco ) 
+    ###manipular os returns para alertar em um email
+    echo $retorno
     $(cat retorno.txt >> logretorno.txt)
-    echo "" > retorno.txt
+    #echo "" > retorno.txt
 else
-    meio
+    retorno=$( meio )
+    echo $retorno
     $(cat retorno.txt >> logretorno.txt)
-    echo "" > retorno.txt
+    #echo "" > retorno.txt
 fi
 
 
