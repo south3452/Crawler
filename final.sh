@@ -34,7 +34,7 @@ function comeco(){
         echo -e "\t$var3," >> final.json
     fi
 
-return $var3
+#mandar para o servidor uma solicitação POST/GET $var3
 }
 
 function meio(){
@@ -131,23 +131,20 @@ elif [[ $? == 1 ]]; then
         
     fi
 fi
-echo "$saida"
+#mandar para o servidor uma solicitação POST/GET $saida
 }
 
 qntdlinhajson=$(wc -l final.json | cut -d" " -f1) 
 
 #verificar se o arquivo está vazio 
 if [[ $qntdlinhajson == 0 ]]; then 
-    retorno=$( comeco ) 
-    ###manipular os returns para alertar em um email
-    echo $retorno
-    $(cat retorno.txt >> logretorno.txt)
-    #echo "" > retorno.txt
+    comeco 
+    #$(cat retorno.txt >> logretorno.txt)
+    echo "" > retorno.txt
 else
-    retorno=$( meio )
-    echo $retorno
+    meio
     $(cat retorno.txt >> logretorno.txt)
-    #echo "" > retorno.txt
+    echo "" > retorno.txt
 fi
 
 
