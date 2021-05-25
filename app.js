@@ -18,16 +18,11 @@ function executar(){
     });
 };
 
-module.exports = async (L,temp,teste) => {
+module.exports = async (L,temp) => {
     //Definir quantas requisições serão feitas
-    L = 2;
     
-    for(var i = 0; i < L ;i++){
-        if(teste == 0){
-            saida = true 
-            return saida 
-            break
-        }
+        for(var i = 0; i < L ;i++){
+
         var data = new Date();
         
         var dia = ("Day:" + now + " " + data.getHours() + ':' + data.getMinutes())
@@ -36,11 +31,9 @@ module.exports = async (L,temp,teste) => {
         //Abrindo o navegador
         const browser = await puppeteer.launch({ /*headless: false,*/ timeout: 0 });
         const page = await browser.newPage();
-        page.setDefaultNavigationTimeout(0);
+        await page.setDefaultNavigationTimeout(0);
         await page.goto('https://www.infomoney.com.br/cotacoes/dogecoin-doge/');
         //await page.screenshot({ path: 'instagram.png' });
-        
-        
 
         const percentage = await page.evaluate(() => {
             const nodelist = document.querySelectorAll('.value p')
@@ -58,19 +51,18 @@ module.exports = async (L,temp,teste) => {
 
         fs.appendFile('retorno.txt', JSON.stringify(dia,null, 2), err => {
             if(err){throw new Error('alguma coisa deu errado')}
-
+    
             console.log('deu certo')
         })
-
+    
         fs.appendFile('retorno.txt', JSON.stringify(percentage, null, 2), err => {
             if(err){throw new Error('alguma coisa deu errado')}
-
+    
             console.log('deu certo')
         })
-
+    
         await browser.close();
         
-        //Definir o intervalo de tempo das requisições em MS 
         //SETTIMEOUT()      MILISEGUNDOS//
         //                       |
         //                       V
@@ -85,10 +77,12 @@ module.exports = async (L,temp,teste) => {
             
             break;
         }else{
-            executar();
-
+            executar();            
+                
             while(Date.now() < end);
+
+            //setTimeout((err) => console.log(err) ,temp)
         }
-}
+    }
     executar();
-};
+}

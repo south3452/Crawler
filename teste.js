@@ -1,3 +1,4 @@
+
 /*const {execFile} = require('child_process');
 
 execFile('./final.sh', (error, stdout, stderr) => {
@@ -41,8 +42,13 @@ child.on('exit', (code, signal) => {
 })*/
 
 
-while(true){
-    var data = new Date();
-    console.log(data.getMilliseconds())
-    console.log(Date.now())
+
+module.exports = function(){
+    for(var i = 0; i < 2; i++){
+        var end = Date.now() + 30000;
+
+        while(Date.now() < end);
+    
+        console.log('Saiu ' + i)
+    }
 }
