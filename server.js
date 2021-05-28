@@ -1,15 +1,16 @@
 const express = require('express')
 const requsicao = require('./app')
 const EventEmitter = require('events');
-const { stdout } = require('process');
 class MyEmitter extends EventEmitter {}
 const app = express()
 const port = 3000
 
 const chamada = new MyEmitter();
 
-chamada.on('chamadinha', (Reki, qntd) =>{
-    requsicao(Reki, qntd)
+chamada.on('chamadinha',  (Reki, qntd) =>{
+    /*requsicao(Reki,qntd).then(t => console.log(t))
+    .catch(err => console.log(err))*/
+    //Promise.all([requsicao(Reki,qntd)]).then(valores => console.log(valores))
 })
 
 app.use(express.static(__dirname + '/public/'))
@@ -19,10 +20,19 @@ app.use(express.urlencoded({
 }))
 app.use(express.json())
 
-app.post('/',async (req,res) => {
+app.post('/',(req,res) => {
     //chamada.emit('chamadinha', req.headers.requi, req.headers.temp)
-    await requsicao(req.headers.requi,req.headers.temp)
-    res.sendStatus(200)
+    var requi = req.headers.requi
+
+    for(var i = 0; i < requi ;i++){
+        if (i == 0){
+            requsicao(i)
+        }else{
+            setTimeout(() => {
+                
+            }, 30000); 
+        }
+    }
 })
 
 app.get('/', (req,res) => {
